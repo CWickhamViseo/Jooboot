@@ -36,10 +36,11 @@ class App extends Component {
     // }
 
     async componentDidMount() {
+        const {jsonResponse} = this.state;
         const githubUrl = `https://jobs.github.com/positions.json?location=new+jersey`;
         const data = await this.callGithubAPI(githubUrl);
         this.setState({ jsonResponse: data });
-        for(let elem of this.state.jsonResponse){
+        for(let elem of jsonResponse){
             for(let param in elem) {
                 console.log(param);
             }
