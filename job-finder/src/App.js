@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
     constructor(props){
@@ -22,15 +23,43 @@ class App extends Component {
                 </p>
                 <p>
                     JSON response be here
-                    {this.state.jsonResponse}
+                    {/*{this.state.jsonResponse.map((elem) => elem.toString())}*/}
                 </p>
             </div>
         );
     }
 
-    componentDidMount(){
-        
+    // componentDidMount(){
+    //     this.setState({
+    //         jsonResponse: axios.get('https://jobs.github.com/positions.json?location=Heidelberg').json(),
+    //     })
+    // }
+
+    async componentDidMount() {
+        const githubUrl = `https://jobs.github.com/positions.json?location=new+jersey`;
+        const data = await this.callGithubAPI(githubUrl);
+        this.setState({ jsonResponse: data });
+        for(let elem of this.state.jsonResponse){
+            for(let param in elem) {
+                console.log(param);
+            }
+        }
     }
+    callGithubAPI(url) {
+        return new Promise(resolve => {
+            axios
+                .get(url)
+                .then(function(response) {
+                    console.log(response.data);
+                    resolve(response.data);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                    return url;
+                });
+        });
+    }
+
 }
 
 export default App;
